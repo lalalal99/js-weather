@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="weather_css/weather-icons.min.css" />
+    <link rel="stylesheet" href="weather_css/css/style.css" />
     <script src="script.js"></script>
     <title>Js - Weather</title>
   </head>
-  <body onload="main()">
+  <body>
     <div>
-      <span id="latitude_text">latitude: <span id="latitude">0</span></span>
-      <span>longitude: <span id="longitude">0</span></span>
-      <span>Weather</span>
-      <span id="weathercode">3</span>
+      <div id="latitude_text">latitude: <span id="latitude">0</span></div>
+      <div id="longitude_text">longitude: <span id="longitude">0</span></div>
+      <div id="windspeed_text">wind speed: <span id="windspeed">0</span></div>
+      <div id="temperature_text">
+        temperature: <span id="temperature">0</span>
+      </div>
+      <div id="city_text">0</div>
+      <div>Weather:<span id="weathercode">0</span></div>
+      <div>
+        <input id="city" type="text" />
+        <button onclick="main()">Search</button>
+      </div>
+      <!-- <i class="wi wi-dat-sunny"></i> -->
     </div>
   </body>
 </html>
