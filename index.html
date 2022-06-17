@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
     <title>Js - Weather</title>
   </head>
-  <body>
-    Weather
+  <body onload="main()">
+    <div>
+      <span id="latitude_text">latitude: <span id="latitude">0</span></span>
+      <span>longitude: <span id="longitude">0</span></span>
+      <span>Weather</span>
+      <span id="weathercode">3</span>
+    </div>
   </body>
 </html>
