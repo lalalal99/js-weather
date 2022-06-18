@@ -1,27 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="shortcut icon" href="#" />
-    <link rel="stylesheet" href="weather_css/weather-icons.min.css" />
-    <link rel="stylesheet" href="weather_css/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/qweather-icons@1.1.1/font/qweather-icons.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
     <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <title>Js - Weather</title>
   </head>
-  <body>
-    <div>
-      <div id="latitude_text">latitude: <span id="latitude">0</span></div>
-      <div id="longitude_text">longitude: <span id="longitude">0</span></div>
-      <div id="windspeed_text">wind speed: <span id="windspeed">0</span></div>
-      <div id="temperature_text">
-        temperature: <span id="temperature">0</span>
+  <body onload="start()">
+    <div class="wrapper">
+      <div id="loading" class="invisible">Loading...</div>
+      <div class="left_side">
+        <div id="searchbar">
+          <div id="city_text">Your city</div>
+
+          <input id="city" type="text" />
+          <button id="search_button" onclick="main()">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/54/54481.png"
+              alt=""
+            />
+          </button>
+        </div>
+        <div id="informations" class="">
+          <div id="data">5:05 PM, Mon, Nov 23,2020</div>
+          <i id="img" class="qi-sunny"></i>
+          <!-- <img id="weather_img" class="qi-101" src="#" alt="" /> -->
+          <span id="temperature">0</span>
+          <span id="weathercode">Weather</span>
+          <div id="windspeed_text">
+            Wind speed <span id="windspeed">0 km/s</span>
+          </div>
+          <div id="latlon">
+            <span id="latitude_text">Latitude</span
+            ><span id="latitude">0</span>
+            <span id="longitude_text">Longitude</span
+            ><span id="longitude">0</span>
+          </div>
+        </div>
       </div>
-      <div id="city_text">0</div>
-      <div>Weather:<span id="weathercode">0</span></div>
-      <div>
-        <input id="city" type="text" />
-        <button onclick="main()">Search</button>
+      <div id="right_side">
+        <div id="graph_wrapper"><canvas id="graph"></canvas></div>
+        <div class="card">Card1</div>
+        <div class="card">Card2</div>
+        <div class="card">Card3</div>
       </div>
-      <!-- <i class="wi wi-dat-sunny"></i> -->
     </div>
   </body>
 </html>
