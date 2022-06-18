@@ -33,7 +33,8 @@ setInterval(main, 60000);
 
 function start() {
   enterListener();
-  main();
+  // main();
+  createGraph();
 }
 
 function enterListener() {
@@ -206,5 +207,51 @@ function round(num) {
 }
 
 function createGraph() {
-  
+  var highlight_clr_dark = "#5596f6";
+  var highlight_clr_light = "#eef4fe";
+  var ctx = document.getElementById("graph").getContext("2d");
+  var xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
+  var yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: xValues,
+      datasets: [
+        {
+          borderColor: highlight_clr_dark,
+          backgroundColor: highlight_clr_light,
+          borderJoinStyle: "miter",
+          data: yValues,
+          // tension: 0.4,
+        },
+      ],
+    },
+    options: {
+      legend: { display: false },
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+            ticks: {
+              display: false, //this will remove only the label
+            },
+          },
+        ],
+        yAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+            ticks: {
+              display: false, //this will remove only the label
+            },
+          },
+        ],
+      },
+    },
+  });
 }

@@ -6,25 +6,26 @@
       href="https://cdn.jsdelivr.net/npm/qweather-icons@1.1.1/font/qweather-icons.css"
     />
     <link rel="stylesheet" href="css/style.css" />
-    <script src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+    <script src="script.js"></script>
     <title>Js - Weather</title>
   </head>
   <body onload="start()">
     <div class="wrapper">
       <div id="loading" class="invisible">Loading...</div>
-      <div class="left_side">
-        <div id="searchbar">
-          <div id="city_text">Your city</div>
+      <div id="searchbar">
+        <div id="city_text">Your city</div>
 
-          <input id="city" type="text" />
-          <button id="search_button" onclick="main()">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/54/54481.png"
-              alt=""
-            />
-          </button>
-        </div>
+        <input id="city" type="text" />
+        <button id="search_button" onclick="main()">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/54/54481.png"
+            alt=""
+          />
+        </button>
+      </div>
+      <div class="left_side">
         <div id="informations" class="">
           <div id="data">5:05 PM, Mon, Nov 23,2020</div>
           <i id="img" class="qi-sunny"></i>
@@ -43,7 +44,9 @@
         </div>
       </div>
       <div id="right_side">
-        <div id="graph_wrapper"><canvas id="graph"></canvas></div>
+        <div id="graph_wrapper">
+          <canvas id="graph"></canvas>
+        </div>
         <div class="card">Card1</div>
         <div class="card">Card2</div>
         <div class="card">Card3</div>
