@@ -32,8 +32,9 @@ let WEATHER_CODES = {
 setInterval(main, 60000);
 
 function start() {
+  document.getElementById("city").value = "Roma";
   enterListener();
-  // main();
+  main();
   createGraph();
 }
 
@@ -47,21 +48,19 @@ function enterListener() {
 }
 
 function main() {
-  // document.getElementById("informations").classList.add("invisible");
-  // document.getElementById("right_side").classList.add("invisible");
-  // document.getElementById("loading").classList.remove("invisible");
+  document.getElementById("left_side").classList.add("invisible");
+  document.getElementById("right_side").classList.add("invisible");
+  document.getElementById("loading_container").classList.remove("invisible");
 
   city = document.getElementById("city").value;
+
   if (city == 0 || city.length < 3) {
+    console.log("Troppe poche lettere inserite.");
     return;
   }
 
   getCoords(city)
     .then((coords) => {
-      if (coords[0] == "API_ERROR") {
-        // main();
-        return;
-      }
       let lat = coords[0];
       let lon = coords[1];
       city = coords[2];
@@ -85,37 +84,40 @@ function main() {
           scriviDataOra(new Date());
 
           // fai diventare visibile
-          document.getElementById("loading").classList.add("invisible");
-          document.getElementById("informations").classList.remove("invisible");
+          document
+            .getElementById("loading_container")
+            .classList.add("invisible");
+          document.getElementById("left_side").classList.remove("invisible");
           document.getElementById("right_side").classList.remove("invisible");
-          console.log("Finito.");
+          console.log("Operation successfull.");
         })
         .catch((error) => {
-          console.error(error);
+          console.log("API_ERROR : [open-meteo.com]");
         });
     })
     .catch((error) => {
-      console.error(error);
+      console.log("API_ERROR : [Geocode.xyz]");
     });
 }
 
-async function getCoords(string, n = 0) {
+async function getCoords(string) {
   let url = "https://geocode.xyz/?locate=" + string + "&json=1";
-  let response = await fetch(url);
-  let data = await response.json();
+  let start_time = performance.now();
 
-  if ("success" in data) {
-    // console.log("Attempt n " + (n + 1));
-    await getCoords(string, n + 1);
-    return ["API_ERROR"];
-  }
+  let eol_time;
+  do {
+    var response = await fetch(url);
+    var data = await response.json();
 
-  if (isNaN(data.latt) && isNaN(data.longt) && n < 20) {
-    // console.log("Attempt n " + (n + 1));
-    await getCoords(string, n + 1);
-  }
+    eol_time = performance.now();
+    if (eol_time - start_time > 5000) {
+      document.getElementById("loading").innerHTML = "Very long wait";
+    }
+  } while ("success" in data);
 
-  // console.log("Done in " + (n + 1) + " attempts. ", data);
+  // console.log("Operation took " + (eol_time - start_time) + " ms");
+  // console.log(data);
+
   return [round(data.latt), round(data.longt), data.standard.city];
 }
 
@@ -127,14 +129,19 @@ function setValue(id, value) {
 function createUrl(lat, lon) {
   // Defaults at Rome
   let url = "https://api.open-meteo.com/v1/forecast?";
-  url += "latitude=" + lat + "&longitude=" + lon + "&current_weather=True";
+  url +=
+    "latitude=" +
+    lat +
+    "&longitude=" +
+    lon +
+    "&current_weather=true&past_days=2";
   return url;
 }
 
 async function getData(url) {
   let response = await fetch(url);
   let data = await response.json();
-  // console.log(data);
+  console.log(url, response, data);
   return data;
 }
 
@@ -206,12 +213,12 @@ function round(num) {
   return +(Math.round(num + "e+2") + "e-2");
 }
 
-function createGraph() {
+function createGraph(temperatures = [30, 26, 29.5]) {
   var highlight_clr_dark = "#5596f6";
   var highlight_clr_light = "#eef4fe";
   var ctx = document.getElementById("graph").getContext("2d");
-  var xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
-  var yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+  var xValues = [0, 10, 50, 80, 100];
+  var yValues = [20].concat(temperatures).concat([40]);
   new Chart(ctx, {
     type: "line",
     data: {
@@ -237,7 +244,7 @@ function createGraph() {
               display: false,
             },
             ticks: {
-              display: false, //this will remove only the label
+              display: false,
             },
           },
         ],
@@ -247,7 +254,7 @@ function createGraph() {
               display: false,
             },
             ticks: {
-              display: false, //this will remove only the label
+              display: false,
             },
           },
         ],

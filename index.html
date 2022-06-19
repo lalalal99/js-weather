@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="shortcut icon" href="#" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/qweather-icons@1.1.1/font/qweather-icons.css"
@@ -13,7 +14,12 @@
   </head>
   <body onload="start()">
     <div class="wrapper">
-      <div id="loading" class="invisible">Loading...</div>
+      <div id="loading_container">
+        <div id="loading">Loading</div>
+        <span class="dot1"></span>
+        <span class="dot2"></span>
+        <span class="dot3"></span>
+      </div>
       <div id="searchbar">
         <div id="city_text">Your city</div>
 
@@ -25,8 +31,8 @@
           />
         </button>
       </div>
-      <div class="left_side">
-        <div id="informations" class="">
+      <div id="left_side" class="invisible">
+        <div id="informations">
           <div id="data">5:05 PM, Mon, Nov 23,2020</div>
           <i id="img" class="qi-sunny"></i>
           <!-- <img id="weather_img" class="qi-101" src="#" alt="" /> -->
@@ -43,13 +49,29 @@
           </div>
         </div>
       </div>
-      <div id="right_side">
+      <div id="right_side" class="invisible">
         <div id="graph_wrapper">
+          <p>Temperature</p>
           <canvas id="graph"></canvas>
         </div>
-        <div class="card">Card1</div>
-        <div class="card">Card2</div>
-        <div class="card">Card3</div>
+        <div class="card" id="card1">
+          <p class="day">Today</p>
+          <i class="qi-sunny" name="card_img"></i>
+          <p class="temp_text">Temperature</p>
+          <p class="temp_number">0 °C</p>
+        </div>
+        <div class="card" id="card2">
+          <p class="day">Today</p>
+          <i class="qi-sunny" name="card_img"></i>
+          <p class="temp_text">Temperature</p>
+          <p class="temp_number">0 °C</p>
+        </div>
+        <div class="card highlighted" id="card3">
+          <p class="day">Today</p>
+          <i class="qi-sunny" name="card_img"></i>
+          <p class="temp_text">Temperature</p>
+          <p class="temp_number">0 °C</p>
+        </div>
       </div>
     </div>
   </body>
