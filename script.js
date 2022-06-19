@@ -28,14 +28,28 @@ let WEATHER_CODES = {
   96: "heavy-thunderstorm",
   99: "heavy-thunderstorm",
 };
-
+let DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+let MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 setInterval(main, 60000);
 
 function start() {
   document.getElementById("city").value = "Roma";
   enterListener();
   main();
-  createGraph();
+  // createGraph();
 }
 
 function enterListener() {
@@ -73,7 +87,53 @@ function main() {
         .then((data) => {
           let temp = data.current_weather.temperature;
           let wind = data.current_weather.windspeed + " km/s";
+
+          let temperatures = data.daily.temperature_2m_max;
           let current_weather = WEATHER_CODES[data.current_weather.weathercode];
+          let current_temp = temperatures[0];
+          let tomorrow_weather = WEATHER_CODES[data.daily.weathercode[1]];
+          let temp_tomorrow = temperatures[1];
+          let ttomorrow_weather = WEATHER_CODES[data.daily.weathercode[2]];
+          let temp_ttomorrow = temperatures[2];
+
+          createGraph([current_temp, temp_tomorrow, temp_ttomorrow]);
+
+          console.log(
+            temp,
+            current_weather,
+            temp_tomorrow,
+            tomorrow_weather,
+            temp_ttomorrow,
+            ttomorrow_weather
+          );
+
+          //card_img1
+          document.getElementById("card_img1").className =
+            "qi-" + current_weather;
+          setValue("weather_text1", prettify(current_weather));
+          setValue("temp_number1", current_temp + " °C");
+
+          //card_img2
+          document.getElementById("card_img2").className =
+            "qi-" + tomorrow_weather;
+          stringa =
+            MONTHS[new Date(Date.now() + 86400000).getUTCMonth()] +
+            " " +
+            new Date(Date.now() + 86400000).getDate();
+          setValue("day2", stringa);
+          setValue("weather_text2", prettify(tomorrow_weather));
+          setValue("temp_number2", temp_tomorrow + " °C");
+
+          //card_img3
+          document.getElementById("card_img3").className =
+            "qi-" + ttomorrow_weather;
+          stringa =
+            MONTHS[new Date(Date.now() + 86400000 * 2).getUTCMonth()] +
+            " " +
+            new Date(Date.now() + 86400000 * 2).getDate();
+          setValue("day3", stringa);
+          setValue("weather_text3", prettify(ttomorrow_weather));
+          setValue("temp_number3", temp_ttomorrow + " °C");
 
           setValue("weathercode", prettify(current_weather));
           setValue("windspeed", wind);
@@ -89,14 +149,15 @@ function main() {
             .classList.add("invisible");
           document.getElementById("left_side").classList.remove("invisible");
           document.getElementById("right_side").classList.remove("invisible");
+
           console.log("Operation successfull.");
         })
         .catch((error) => {
-          console.log("API_ERROR : [open-meteo.com]");
+          console.log("API_ERROR [open-meteo.com]", error);
         });
     })
     .catch((error) => {
-      console.log("API_ERROR : [Geocode.xyz]");
+      console.log("API_ERROR [Geocode.xyz]", error);
     });
 }
 
@@ -134,14 +195,19 @@ function createUrl(lat, lon) {
     lat +
     "&longitude=" +
     lon +
-    "&current_weather=true&past_days=2";
+    "&current_weather=true" +
+    "&past_days=0" +
+    "&hourly=temperature_2m" +
+    "&daily=temperature_2m_max" +
+    "&daily=weathercode" +
+    "&timezone=CET";
   return url;
 }
 
 async function getData(url) {
   let response = await fetch(url);
   let data = await response.json();
-  console.log(url, response, data);
+  console.log(url, data);
   return data;
 }
 
@@ -157,25 +223,9 @@ function scriviDataOra(data) {
   let minutes = data.getMinutes();
   minutes = minutes < 10 ? "0" + minutes : minutes;
 
-  const day = ((n) => ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][n])(
-    data.getDay()
-  );
+  const day = ((n) => DAYS[n])(data.getDay());
 
-  const month = ((n) =>
-    [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ][n])(data.getMonth());
+  const month = ((n) => MONTHS[n])(data.getMonth());
 
   const dayN = data.getDate();
   const year = data.getFullYear();
@@ -213,12 +263,19 @@ function round(num) {
   return +(Math.round(num + "e+2") + "e-2");
 }
 
+function avg(array) {
+  return array.reduce((a, b) => a + b) / array.length;
+}
+
 function createGraph(temperatures = [30, 26, 29.5]) {
   var highlight_clr_dark = "#5596f6";
   var highlight_clr_light = "#eef4fe";
+
+  var minValue = Math.min.apply(null, temperatures) - 0.01;
+  var maxValue = Math.max.apply(null, temperatures) + 0.01;
   var ctx = document.getElementById("graph").getContext("2d");
   var xValues = [0, 10, 50, 80, 100];
-  var yValues = [20].concat(temperatures).concat([40]);
+  var yValues = [minValue].concat(temperatures).concat([maxValue]);
   new Chart(ctx, {
     type: "line",
     data: {
