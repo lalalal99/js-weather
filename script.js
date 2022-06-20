@@ -175,6 +175,7 @@ async function getCoords(string) {
       document.getElementById("loading").innerHTML = "Very long wait";
     }
   } while ("success" in data);
+  document.getElementById("loading").innerHTML = "Loading";
 
   // console.log("Operation took " + (eol_time - start_time) + " ms");
   // console.log(data);
